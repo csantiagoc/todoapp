@@ -29,3 +29,24 @@ def test_get_todos(client):
     assert len(data) == 2
     assert data[0] == mock_todo_1.to_dict()
     assert data[1] == mock_todo_2.to_dict()
+
+
+
+def test_update_todo(client):
+    mock_todo = Todo(id=1, title='Test Todo', description='Test Description', state='active')
+
+    mock_todo_repository = Mock()
+    mock_todo_repository.update.return_value = mock_todo
+
+    with patch('app.views.TodoRepository', mock_todo_repository):
+        response = client.put('/todos/1', json={'state': 'completed'})
+
+    assert response.status_code == 200
+    data = response.get_json()
+    assert data == mock_todo.to_dict()
+
+
+
+
+
+

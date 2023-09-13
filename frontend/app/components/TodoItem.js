@@ -1,10 +1,15 @@
 import "../globals.css";
 import React, { useState } from "react";
 import Link from "next/link";
+import TodoService from "../services/todo_service";
 
-function TodoItem({ todo }) {
+function TodoItem({ todo, updateTodos }) {
   const [status, setStatus] = useState(todo.status);
-  
+  const handleCheck = () => {
+    TodoService.updateTodo(todo.id, { status: "done" });
+    setStatus("done");
+    updateTodos();
+  };
 
   return (
     <div className="todo-item-container">
@@ -15,6 +20,7 @@ function TodoItem({ todo }) {
         className="todo-item-checkbox"
         type="checkbox"
         checked={status === "done"}
+        onChange={handleCheck}
       />
     </div>
   );
