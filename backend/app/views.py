@@ -8,6 +8,14 @@ def get_todos():
     todos = TodoRepository.get_all()
     return jsonify([todo.to_dict() for todo in todos])
 
+@todo_bp.route('/<int:id>', methods=['GET'])
+def get_todo(id):
+    todo = TodoRepository.get_by_id(id)
+    if todo:
+        return jsonify(todo.to_dict())
+    else:
+        return jsonify({'error': 'Todo not found'}), 404
+
 @todo_bp.route('/<int:id>', methods=['PUT'])
 def update_todo(id):
     data = request.get_json()

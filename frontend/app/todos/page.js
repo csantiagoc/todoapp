@@ -16,7 +16,6 @@ function TodoList() {
   }, []);
 
 
-
   const handleUpdateTodos = () => {
     forceUpdate();
   };
@@ -24,7 +23,7 @@ function TodoList() {
   return (
     <div className="todos-container-card">
       <h1 className="todos-app-tittles">Todo List</h1>
-      
+
       <div className="todos-list-container">
         {todos
           .filter((todo) => todo.status === "active")

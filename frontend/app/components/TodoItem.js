@@ -8,6 +8,7 @@ function TodoItem({ todo, updateTodos }) {
   const handleCheck = () => {
     TodoService.updateTodo(todo.id, { status: "done" });
     setStatus("done");
+    console.log(updateTodos)
     updateTodos();
   };
 
