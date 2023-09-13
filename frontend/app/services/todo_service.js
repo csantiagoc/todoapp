@@ -7,4 +7,5 @@ export default {
   getTodos: () => backend.get('/todos'),
   getTodo: id => backend.get(`/todos/${id}`),
   updateTodo: (id, data) => backend.put(`/todos/${id}`, data),
+  createTodo: (data) => backend.post('/todos', data)
 };

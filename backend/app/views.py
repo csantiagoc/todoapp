@@ -8,6 +8,12 @@ def get_todos():
     todos = TodoRepository.get_all()
     return jsonify([todo.to_dict() for todo in todos])
 
+@todo_bp.route('/', methods=['POST'])
+def create_todo():
+    data = request.get_json()
+    todo = TodoRepository.create(data['title'], data.get('description', ''))
+    return jsonify(todo.to_dict()), 201
+
 @todo_bp.route('/<int:id>', methods=['GET'])
 def get_todo(id):
     todo = TodoRepository.get_by_id(id)

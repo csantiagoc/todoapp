@@ -30,7 +30,18 @@ def test_get_todos(client):
     assert data[0] == mock_todo_1.to_dict()
     assert data[1] == mock_todo_2.to_dict()
 
+def test_create_todo(client):
+    mock_todo = Todo(id=1, title='Test Todo', description='Test Description', state='active')
 
+    mock_todo_repository = Mock()
+    mock_todo_repository.create.return_value = mock_todo
+
+    with patch('app.views.TodoRepository', mock_todo_repository):
+        response = client.post('/todos/', json={'title': 'Test Todo'})
+
+    assert response.status_code == 201
+    data = response.get_json()
+    assert data == mock_todo.to_dict()
 
 def test_get_todo(client):
     mock_todo = Todo(id=1, title='Test Todo', description='Test Description', state='active')
@@ -58,6 +69,29 @@ def test_update_todo(client):
     data = response.get_json()
     assert data == mock_todo.to_dict()
 
+def test_get_todo_not_found(client):
+    mock_todo_repository = Mock()
+    mock_todo_repository.get_by_id.return_value = None
+
+    with patch('app.views.TodoRepository', mock_todo_repository):
+        response = client.get('/todos/1')
+
+    assert response.status_code == 404
+    data = response.get_json()
+    assert 'error' in data
+    assert data['error'] == 'Todo not found'
+
+def test_update_todo_not_found(client):
+    mock_todo_repository = Mock()
+    mock_todo_repository.update.return_value = None
+
+    with patch('app.views.TodoRepository', mock_todo_repository):
+        response = client.put('/todos/1', json={'state': 'completed'})
+
+    assert response.status_code == 404
+    data = response.get_json()
+    assert 'error' in data
+    assert data['error'] == 'Todo not found'
 
 
 
